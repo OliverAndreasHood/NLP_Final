@@ -25,6 +25,10 @@ def load_csv2(file_path, l):
     return
 
 def pn_compare(l):
+    """
+    Returns True if positive reviews amount equals negative rewievs amount
+    else returns False
+    """
     pos, neg = 0, 0
     for rev in l:
         if rev[1] == 0:
@@ -34,10 +38,12 @@ def pn_compare(l):
     print(f"Ilosć recenzji:\nPozytywnych: {pos}\nNegatywnych: {neg}")
     if pos == neg:
         print("Dane są zbalansowane.")
+        return True
+    else:
+        print("Dane nie są zbalansowane.")
+        return False
 
-a = []
-load_csv2("movies_data.csv", a)
-pn_compare(a)
+
 
 ###############
 # inna opcja ładowania danych ale ma problem ze znakami \ :
