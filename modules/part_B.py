@@ -16,7 +16,6 @@ def word_counter2(l, cl = 10):
     time.sleep(1)
     for rev, sentiment in l:
         sys.stdout.write(f'\rIlosc wszystkich występujących słów:\t{wc}')
-        sys.stdout.flush()
         for word in rev:
             wc += 1
             all_words.append(word)
