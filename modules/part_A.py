@@ -5,20 +5,25 @@ import string
 import sys
 import time
 
-def load_csv2(file_path, l, lim = 0):
+def load_csv2(file_path, l = [], lim = 0):
     """
     type(file_path) = str()
-    type(l) = list()
+    type(l) = list() (l = [] as default)
     lim = 0 (default) means parse whole file
     csv file with 2 columns separated with comma
     Loading function. Appending data to l as [row[0],row[1]]
+    returns:
+        l = [[row[0], row[1]], ...]
+        len(pos) and len(neg)
+        alw -> filtered all_words list
+        
     """
     #ładowanie pliku z podziałem na słowa i wykluczeniem stopwords, digit, punctuation
     with open(file_path, "r", encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         sw =  set(stopwords.words("english"))
         line_count = 0
-        pos, neg = [], []
+        pos, neg, alw = [], [], []
         percent = 0
         
         for row in csv_reader:
@@ -37,7 +42,8 @@ def load_csv2(file_path, l, lim = 0):
                     if word not in sw and word not in string.punctuation:
                         if word.isalpha() == True:
                             filtred.append(word)
-            
+                            alw.append(word)
+                            
                 if int(row[1]) == 0:
                      neg.append([filtred, int(row[1])])
                 else:
@@ -58,4 +64,4 @@ def load_csv2(file_path, l, lim = 0):
         l = pos + neg
         sys.stdout.write('\rDone!       ')
         time.sleep(1)
-    return l, len(pos), len(neg)
+    return l, len(pos), len(neg), alw
