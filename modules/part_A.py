@@ -22,7 +22,7 @@ def load_csv2(file_path, l, lim = 0):
         percent = 0
         
         for row in csv_reader:
-            sys.stdout.write('\rloading data' + f'\t{percent:.1f}%\t ({line_count})')
+            sys.stdout.write(f'\rloading data' + f'\t{percent:.1f}%\t ({line_count})')
             sys.stdout.flush()
                
             if line_count == 0:
@@ -33,9 +33,10 @@ def load_csv2(file_path, l, lim = 0):
             
                 filtred = []
                 for word in row[0]:
+                    word = word.rstrip().lower()
                     if word not in sw and word not in string.punctuation:
                         if word.isalpha() == True:
-                            filtred.append(word.rstrip().lower())
+                            filtred.append(word)
             
                 if int(row[1]) == 0:
                      neg.append([filtred, int(row[1])])
@@ -50,23 +51,11 @@ def load_csv2(file_path, l, lim = 0):
             else:
                 percent = (line_count)/lim*100
             
-            if line_count == lim+1:
+            if lim != 0 and line_count == lim+1:
                 break
-            time.sleep(0.0001)
+            time.sleep(0.001)
             
         l = pos + neg
         sys.stdout.write('\rDone!       ')
+        time.sleep(1)
     return l, len(pos), len(neg)
-
-###############
-# inna opcja ładowania danych ale ma problem ze znakami \ :
-#
-#reviews = []
-#f = open("movies_data.csv", "r", encoding='utf-8')
-#f.readline()
-#for line in f:
-#    line = line.replace("<br /><br />", " ")
-#    line = line.replace("\n", "")
-#    line = line.replace("\\'", "'")            # ale to nie działa :(
-#    reviews.append([line[:-2],line[-1]])
-#f.close()

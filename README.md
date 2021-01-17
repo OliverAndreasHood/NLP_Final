@@ -6,7 +6,7 @@ Mamy do zrobienia:
         1. Przygotowanie i oczyszczenie
         2. Zbalansowanie danych (jesli Neg != Pos)
     
-    B. Analiza wstępna tekstu:
+    B. Analiza wstępna tekstu: (DONE!)
         1. Ilosć słów (Bag of Words)
         2. Ilosć unikatowych (Set of Words)
         3. 40 najpopularniejszych słów (most_common)
