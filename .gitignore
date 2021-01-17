@@ -1,3 +1,11 @@
+
+# Data Files:
 /.vector_cache/
 movies_data.csv
+
+# Pychache Files:
 /__pycache__
+*/__pycache__
+
+#PiterFiles:
+workstage.py
