@@ -39,7 +39,7 @@ def load_csv2(file_path, l = [], lim = 0):
                 filtred = []
                 for word in row[0]:
                     word = word.rstrip().lower()
-                    if word not in sw and word not in string.punctuation:
+                    if word not in sw #and word not in string.punctuation:
                         if word.isalpha() == True:
                             filtred.append(word)
                             alw.append(word)
