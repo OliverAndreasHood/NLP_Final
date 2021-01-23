@@ -2,7 +2,7 @@
 
 Mamy do zrobienia:
 
-    A. Preprocesing: (DONE!)
+    A. Preprocesing: (DONE!) ?Lemmatyzacja?
         1. Przygotowanie i oczyszczenie
         2. Zbalansowanie danych (jesli Neg != Pos)
     
@@ -11,14 +11,14 @@ Mamy do zrobienia:
         2. Ilosć unikatowych (Set of Words)
         3. 40 najpopularniejszych słów (most_common)
     
-    C. Analiza algorytmami klasycznymi (Trening_set[80%], Test_set[20%]):
+    C. Analiza algorytmami klasycznymi (Trening_set[80%], Test_set[20%]): (DONE!)
         1. Naive Bayes:
             + 15 najważniejszych słów
         2. Regresja logistyczna
-        3. SVM ???
-        4. Powyższe trzy razem ???
+        3. SVM
+        4. Powyższe trzy razem
         +
-        Średnia dokładnosć każdej z metod:
+        Średnia dokładnosć każdej z metod: (DONE!)
             10 powtórzeń budowania modelu
     
     D. Analiza o neuronowe:

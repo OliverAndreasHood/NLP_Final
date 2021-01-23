@@ -13,12 +13,12 @@ def word_counter2(alw, out=False, cl = 10):
         ploting [cl] most_common words 
     returning BoW dict, type==probability.FreqDist 
     """
-    if out: print(f'Ilosc wszystkich słów:\t{len(alw)}')
+    if out: print(f'Number of all words:\t{len(alw)}')
     BoW = FreqDist(alw)
-    if out: print(f'Ilosc unikatowych słów:\t{len(set(BoW))}\n')
+    if out: print(f'Number of unique words:\t{len(set(BoW))}\n')
     
     time.sleep(1)
-    if out: BoW.plot(cl,title=f'Rozkład występowania {cl} najpopularniejszych słów')
+    if out: BoW.plot(cl,title=f'Distribution of the {cl} most common words')
     
     return BoW
     
