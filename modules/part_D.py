@@ -21,3 +21,5 @@
 #        + Zaprezentować graficznie
 
 print("Hello")
+
+print('World')
