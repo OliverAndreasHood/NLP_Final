@@ -6,15 +6,16 @@ import time
 
 def load_csv2(file_path, l = [], lim = 0):
     """
-    type(file_path) = str()
-    type(l) = list() (l = [] as default)
-    lim = 0 (default) means parse whole file
-    csv file with 2 columns separated with comma
-    Loading function. Appending data to l as [row[0],row[1]]
+    file_path => type==str(), csv file with 2 columns separated with comma => (text, statement(0,1))
+    l => type==list() default l=[]
+    lim => type==int() default=0 (means parse whole file), number of lines to parse
+    
+    Loading function. Appending data to l as (row[0],row[1])
     returns:
         l = [[row[0], row[1]], ...]
+        statemen==0 => negative
         len(pos) and len(neg)
-        alw -> filtered all_words list
+        alw => type==list(), filtered list of all words
         
     """
     #ładowanie pliku z podziałem na słowa i wykluczeniem stopwords, digit, punctuation
@@ -44,9 +45,9 @@ def load_csv2(file_path, l = [], lim = 0):
                             alw.append(word)
                             
                 if int(row[1]) == 0:
-                     neg.append([filtred, int(row[1])])
+                     neg.append((filtred, int(row[1])))
                 else:
-                    pos.append([filtred, int(row[1])])
+                    pos.append((filtred, int(row[1])))
                 line_count += 1
         
         
