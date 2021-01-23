@@ -24,4 +24,4 @@ print("Hello")
 
 print('World')
 
-print('Dej mi spokoj juz')
+print('bembe spamic hahahahaha')
