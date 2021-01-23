@@ -2,7 +2,7 @@
 
 Mamy do zrobienia:
 
-    A. Preprocesing: (DONE!) ?Lemmatyzacja?
+    A. Preprocesing: (DONE!)
         1. Przygotowanie i oczyszczenie
         2. Zbalansowanie danych (jesli Neg != Pos)
     
