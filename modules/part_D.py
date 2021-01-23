@@ -20,3 +20,4 @@
 #            batch [!] - ta wielkosć podzbioru wybieranego z review_setów
 #        + Zaprezentować graficznie
 
+print("Hello")
