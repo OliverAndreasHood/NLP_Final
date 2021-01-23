@@ -23,3 +23,5 @@
 print("Hello")
 
 print('World')
+
+print('Dej mi spokoj juz')
