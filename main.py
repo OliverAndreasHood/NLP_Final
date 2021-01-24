@@ -35,6 +35,6 @@ from modules.part_C import Cmain_f as Cf
 NB1(a, bow, outacc=True, mostif=True, mif=15)
 
 # odpalam serię wszystkich metod po 10 powtórzeń, zwraca listę wyników.
-accs = Cf(a, bow, repeats=10, auto=True, ls_acc=True)
+accs = Cf(a, bow, repeats=10, auto=True)
 
 ############################## PART_D ####################################
