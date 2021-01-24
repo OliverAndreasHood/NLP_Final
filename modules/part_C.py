@@ -24,19 +24,35 @@ def NaivB1(revs, BoW, lim=3000, TrSet=0.8, outacc=False, mostif=False, mif=10):
     mostif => type==bool default False, print n most informative futures from Naive Bayes Classifier 
     mif => type==int default 10, number of most informative features to print, have to be greater than 0.
     """
-    sys.stdout.write("\rClassic Naive Bayes algorythm => Preparing.. ")
+    start = time.time()
+    print('Classic Naive Bayes algorythm\n')
+   
+    sys.stdout.write("\r=> Preparing . ")
     wf = list(BoW.keys())[:lim]
-                    
+    
+    sys.stdout.write("\r=> Preparing #. ")                
     random.shuffle(revs)
+    
+    sys.stdout.write("\r=> Preparing ##. ")
     TrSet = int(len(revs)*TrSet)
+    
+    sys.stdout.write("\r=> Preparing ###. ")
     featuresets = [(find_features(rev, wf),category) for (rev,category) in revs]
+    
+    sys.stdout.write("\r=> Preparing ####. ")
     training_set = featuresets[:TrSet]
     testing_set = featuresets[TrSet:]
+    sys.stdout.write(f"\rPreparing time {time.time()-start:.2f} s\n")
     
-    sys.stdout.write("\rClassic Naive Bayes algorythm => Training..  ")
+    start = time.time()
+    sys.stdout.write("\r=> Training..  ")
     NB_classifier = nltk.NaiveBayesClassifier.train(training_set)
+    sys.stdout.write(f"\rTraining time  {time.time()-start:.2f} s\n")
+    
+    start = time.time()
+    sys.stdout.write("\r=> Testing..  ")
     acc = (nltk.classify.accuracy(NB_classifier,testing_set))*100
-    sys.stdout.write("\rClassic Naive Bayes algorythm => Done!        ")
+    sys.stdout.write(f"\rTesting time  {time.time()-start:.2f} s\n")
     time.sleep(1)    
     
     if outacc: print(f"\n> The accuracy of the MNB Naive Bayes method to the classification problem on the test set is: {acc:.2f}") 
@@ -55,11 +71,11 @@ def NaivB2(training_set, testing_set):
 ##########################2. Logistic Regression ##############################
 
 def LogRegr(training_set, testing_set):
-        
-    LogisticRegression_classifier = SklearnClassifier(LogisticRegression(solver='lbfgs'))
+    
+    LogisticRegression_classifier = SklearnClassifier(LogisticRegression(solver='lbfgs', max_iter=300))
     LogisticRegression_classifier.train(training_set)
     acc = (nltk.classify.accuracy(LogisticRegression_classifier, testing_set))*100
-      
+
     return acc
 
 ##########################3. SVM ##############################################
@@ -100,7 +116,7 @@ def AllF(training_set, testing_set):
     MNB_classifier = SklearnClassifier(MultinomialNB())
     MNB_classifier.train(training_set)
 
-    LogisticRegression_classifier = SklearnClassifier(LogisticRegression(solver='lbfgs'))
+    LogisticRegression_classifier = SklearnClassifier(LogisticRegression(solver='lbfgs', max_iter=300))
     LogisticRegression_classifier.train(training_set)
 
     LinearSVC_classifier = SklearnClassifier(LinearSVC())
@@ -118,7 +134,7 @@ def AllF(training_set, testing_set):
 #Średnia dokładnosć każdej z metod:
 #10 powtórzeń budowania modelu
 
-def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False):
+def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=True):
     """
     revs => type==list, parsed input data as [([words], statement), ([...],.), ...]
     Bow => type==probability.FreqDist, BagOfWords representation of l, 
@@ -126,11 +142,14 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False)
     TrSet => type==float default 0.8, size of Trening_Set. Testing_set = 1 - TrSet    
     repeats => type==int default 0, repeats number of choosen method
     auto => type==bool default False, repeat all methods autmoaticly
-    ls_acc => type==bool default False, list acc of each one repeat.
+    ls_acc => type==bool default True, list acc of each one repeat.
     """
-    print("\nReading input data...")
+    print("\nC_main reading input config...")
     time.sleep(1)
-
+    
+    #końcowa tabela zbiorcza
+    accs = []
+    
     if auto:
         print("Proces will repeat automaticly for all methods.")
         func = "AUTO"
@@ -146,11 +165,15 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False)
         else:
             print("Wrong input!")
             return False    
-      
+    
+    sys.stdout.write("\rCreating Data Sets => Preparing.. ")
     wf = list(BoW.keys())[:lim]
     TrSet = int(len(revs)*TrSet)
     random.shuffle(revs)
+    
+    sys.stdout.write("\rCreating Data Sets => Indexing..  ")
     featuresets = [(find_features(rev,wf),category) for (rev,category) in revs]
+    sys.stdout.write("\rCreating Data Sets => Done         \n")
     
     if func == "NB" or func == "AUTO":
         NBacc_list = []
@@ -160,15 +183,17 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False)
             random.shuffle(featuresets)
             training_set = featuresets[:TrSet]
             testing_set = featuresets[TrSet:]
+            sys.stdout.write(f"\rRun No.{repeats-i+1} ")
             
             NBacc_list.append(NaivB2(training_set, testing_set))
-            if ls_acc: print(f'Run No.{repeats-i+1} acc: {NBacc_list[repeats-i]:.2f}')
+            if ls_acc: print(f'acc: {NBacc_list[repeats-i]:.2f}')
             i-=1
                 
         NBacc = np.mean(NBacc_list)
         print(f'MNB Naive Bayes method mean accuracy in {repeats} repeats: {NBacc:.4f}\n')
+        accs.append(("NB", NBacc, NBacc_list))
         time.sleep(1)
-    
+        
     if func == "LR" or func == "AUTO":
         LRacc_list = []
         i=repeats
@@ -177,15 +202,17 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False)
             random.shuffle(featuresets)
             training_set = featuresets[:TrSet]
             testing_set = featuresets[TrSet:]
+            sys.stdout.write(f"\rRun No.{repeats-i+1} ")
             
             LRacc_list.append(LogRegr(training_set, testing_set))
-            if ls_acc: print(f'Run No.{repeats-i+1} acc: {LRacc_list[repeats-i]:.2f}')
+            if ls_acc: print(f'acc: {LRacc_list[repeats-i]:.2f}')
             i-=1
             
         LRacc = np.mean(LRacc_list)
         print(f'Logistic Regression method mean accuracy in {repeats} repeats: {LRacc:.4f}\n')
+        accs.append(("LR", LRacc, LRacc_list))
         time.sleep(1)
-    
+
     if func == "SVM" or func == "AUTO":
         SVMacc_list = []
         i=repeats
@@ -194,15 +221,17 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False)
             random.shuffle(featuresets)
             training_set = featuresets[:TrSet]
             testing_set = featuresets[TrSet:]
+            sys.stdout.write(f"\rRun No.{repeats-i+1} ")
             
             SVMacc_list.append(SvmF(training_set, testing_set))
-            if ls_acc: print(f'Run No.{repeats-i+1} acc: {SVMacc_list[repeats-i]:.2f}')
+            if ls_acc: print(f'acc: {SVMacc_list[repeats-i]:.2f}')
             i-=1
 
         SVMacc = np.mean(SVMacc_list)
         print(f'Linear SVM method mean accuracy in {repeats} repeats: {SVMacc:.4f}\n')
+        accs.append(("SVM", SVMacc, SVMacc_list))
         time.sleep(1)
-    
+
     if func == "ALL" or func == "AUTO":
         ALLacc_list = []
         i=repeats
@@ -211,20 +240,18 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=False)
             random.shuffle(featuresets)
             training_set = featuresets[:TrSet]
             testing_set = featuresets[TrSet:]
+            sys.stdout.write(f"\rRun No.{repeats-i+1} ")
             
             ALLacc_list.append(AllF(training_set, testing_set))
-            if ls_acc: print(f'Run No.{repeats-i+1} acc: {ALLacc_list[repeats-i]:.2f}')
+            if ls_acc: print(f'acc: {ALLacc_list[repeats-i]:.2f}')
             i-=1
 
         ALLacc = np.mean(ALLacc_list)
         print(f'Aggregated classifier method mean accuracy in {repeats} repeats: {ALLacc:.4f}\n')
+        accs.append(("ALL", ALLacc, ALLacc_list))
         time.sleep(1)
-    
-    #końcowa tabela zbiorcza
-    accs = [("NB", NBacc, NBacc_list),
-            ("LR", LRacc, LRacc_list),
-            ("SVM", SVMacc, SVMacc_list),
-            ("ALL", ALLacc, ALLacc_list) ]
+
+
 
     return accs
 
