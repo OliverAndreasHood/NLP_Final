@@ -6,7 +6,7 @@ from modules.part_C import Repeat as Rpt
 ############################## PART_A ####################################
 
 # tworzę liste krotek "a" i liste wszystkich słów "allwords"
-a, p_len, n_len, allwords = lcsv("movies_data.csv", lim = 1018) 
+a, p_len, n_len, allwords = lcsv("movies_data.csv")#, lim = 1018) 
 # daję 1018 żeby później operować na ok.500 pos i 500 neg. Finalnie ustawi się 0 => całosć
 
 print(f"\n\nIlosć recenzji:\nPozytywnych: {p_len}\nNegatywnych: {n_len}")
@@ -16,7 +16,7 @@ else: print("Dane nie są zbalansowane!\n")
 ############################## PART_B ####################################
 
 # tworzę BagOfWords i wypusuję wartosci Bow,Sow + plot 40 most_common
-bow = wc(allwords, cl = 40, out=True)
+bow = wc(allwords, cl = 40, out=False)
 
 ############################## PART_C ####################################
 
