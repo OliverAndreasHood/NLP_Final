@@ -38,3 +38,29 @@ NB1(a, bow, outacc=True, mostif=True, mif=15)
 accs = Cf(a, bow, repeats=10, auto=True)
 
 ############################## PART_D ####################################
+from modules.part_D import bow_and_web, get_vectors, train_network, get_accuracy
+
+#odpalam przejście analizy opartej o BoW
+BoWmodel_params = bow_and_web(a, TrSet=0.8, lr=0.1, n_iters=100)
+print(f'\n> {BoWmodel_params[0]}\n> {BoWmodel_params[1]}')
+
+import torchtext
+glove = torchtext.vocab.GloVe(name="6B", dim=200)
+train, valid, test = get_vectors(glove, a) #przygotowuje sobie dane w oparciu o gotowe embeddingi z glove
+
+import torch
+#za kazdym razem będzie bral 200 rekordow (przy trenowaniu) i co epoke tasujemy (shuffle = True)
+train_loader = torch.utils.data.DataLoader(train, batch_size=200, shuffle=True)
+valid_loader = torch.utils.data.DataLoader(valid, batch_size=200, shuffle=True)
+test_loader = torch.utils.data.DataLoader(test, batch_size=200, shuffle=True)
+
+import torch.nn as nn
+siec = nn.Sequential(nn.Linear(200, 50),  #przekształcenie liniowe R^200 ---> R^30
+                        nn.ReLU(),          #przekształcenie ReLU
+                        nn.Linear(50, 10),  #kolejne przekształcenie liniowe R^50--->R^10
+                        nn.ReLU(),          #przekształcenie ReLU
+                        nn.Linear(10, 2))   # przekształcenie liniowe, efekt: 2 liczby
+                        
+train_network(siec, train_loader, valid_loader, test_loader, num_epochs=100, learning_rate=0.0001)
+
+print("Final test accuracy:", get_accuracy(siec, test_loader)) #dokladnosc na zbiorze testowym
