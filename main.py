@@ -2,7 +2,7 @@
 #                                                                        #
 #                             NLP-FINAL                                  #
 #       which is the last winter semester project of the NLP course,     #
-#         student history from 2020 and 2021 in four python parts.       #
+#        student history from 2020 and 2021 in seven python parts.       #
 #   Authors:                                                             #
 #       Piotr Szulc                                                      #
 #       Magdalena Lipka                                                  #
@@ -35,32 +35,58 @@ from modules.part_C import Cmain_f as Cf
 NB1(a, bow, outacc=True, mostif=True, mif=15)
 
 # odpalam serię wszystkich metod po 10 powtórzeń, zwraca listę wyników.
-accs = Cf(a, bow, repeats=10, auto=True)
+accs = Cf(a, bow, repeats=5, auto=False, func="NB")
 
-############################## PART_D ####################################
-from modules.part_D import bow_and_web, get_vectors, train_network, get_accuracy
+############################### PART_D ####################################
+from modules.part_D1 import bow_and_web
 
-#odpalam przejście analizy opartej o BoW
-BoWmodel_params = bow_and_web(a, TrSet=0.8, lr=0.1, n_iters=100)
+            ##################### 1 #####################
+#odpalam przejście analizy opartej o BoW (1xLinear)
+BoWmodel_params = bow_and_web(a, TrSet=0.8, lr=0.1, n_iters=10)
 print(f'\n> {BoWmodel_params[0]}\n> {BoWmodel_params[1]}')
 
-import torchtext
-glove = torchtext.vocab.GloVe(name="6B", dim=200)
-train, valid, test = get_vectors(glove, a) #przygotowuje sobie dane w oparciu o gotowe embeddingi z glove
-
-import torch
-#za kazdym razem będzie bral 200 rekordow (przy trenowaniu) i co epoke tasujemy (shuffle = True)
-train_loader = torch.utils.data.DataLoader(train, batch_size=200, shuffle=True)
-valid_loader = torch.utils.data.DataLoader(valid, batch_size=200, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test, batch_size=200, shuffle=True)
-
+            ##################### 2 #####################
+from modules.part_D2 import get_vectors, train_network
+from modules.ff import get_accuracy
 import torch.nn as nn
-siec = nn.Sequential(nn.Linear(200, 50),  #przekształcenie liniowe R^200 ---> R^30
-                        nn.ReLU(),          #przekształcenie ReLU
-                        nn.Linear(50, 10),  #kolejne przekształcenie liniowe R^50--->R^10
-                        nn.ReLU(),          #przekształcenie ReLU
-                        nn.Linear(10, 2))   # przekształcenie liniowe, efekt: 2 liczby
-                        
-train_network(siec, train_loader, valid_loader, test_loader, num_epochs=100, learning_rate=0.0001)
+import torchtext
 
-print("Final test accuracy:", get_accuracy(siec, test_loader)) #dokladnosc na zbiorze testowym
+#przygotowujemy baze embeddingów GloVe
+glove = torchtext.vocab.GloVe(name="6B", dim=200)
+
+#przygotowuje sobie dane w oparciu o gotowe embeddingi z glove
+train_l, valid_l, test_l = get_vectors(glove, a, batch_size=200, shuffle=True) 
+
+#definiujemy strukturę modelu
+siec = nn.Sequential(nn.Linear(200, 50),
+                        nn.ReLU(),
+                        nn.Linear(50, 10),
+                        nn.ReLU(),
+                        nn.Linear(10, 2))
+                   
+#odpalam przejcie analizy opartej o embeddingi GloVe 200D     
+train_network(siec, train_l, valid_l, test_l, num_epochs=100, learning_rate=0.0001, pltout=False)
+print("Final test accuracy:", get_accuracy(siec, test_l)) #dokladnosc na zbiorze testowym
+
+            ##################### 3 #####################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

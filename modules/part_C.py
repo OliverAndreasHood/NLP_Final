@@ -134,13 +134,14 @@ def AllF(training_set, testing_set):
 #Średnia dokładnosć każdej z metod:
 #10 powtórzeń budowania modelu
 
-def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=True):
+def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, func=None, auto=False, ls_acc=True):
     """
     revs => type==list, parsed input data as [([words], statement), ([...],.), ...]
     Bow => type==probability.FreqDist, BagOfWords representation of l, 
     lim => type==int. word_features cut-off 
     TrSet => type==float default 0.8, size of Trening_Set. Testing_set = 1 - TrSet    
     repeats => type==int default 0, repeats number of choosen method
+    func => type==str default None, type of algorythm to run automaticly ["NB","LR","SVM","ALL"]
     auto => type==bool default False, repeat all methods autmoaticly
     ls_acc => type==bool default True, list acc of each one repeat.
     """
@@ -155,16 +156,17 @@ def Cmain_f(revs, BoW, lim=3000, TrSet=0.8, repeats=2, auto=False, ls_acc=True):
         func = "AUTO"
         time.sleep(1)
     else:
-        x = input("#Runing method repeats#\nChoose one following methods:\n1 => Naive Bayes\n2 => Logistic Regresion\n3 => Linear SVM\n4 => Aggregated all above\n> ")
-        methods = ['1','2','3','4']
-        if x in methods:
-            if x == "1": func = "NB"
-            elif x == "2": func = "LR"
-            elif x == "3": func = "SVM"
-            elif x == "4": func = "ALL"
-        else:
-            print("Wrong input!")
-            return False    
+        if func==None:
+            x = input("#Runing method repeats#\nChoose one following methods:\n1 => Naive Bayes\n2 => Logistic Regresion\n3 => Linear SVM\n4 => Aggregated all above\n> ")
+            methods = ['1','2','3','4']
+            if x in methods:
+                if x == "1": func = "NB"
+                elif x == "2": func = "LR"
+                elif x == "3": func = "SVM"
+                elif x == "4": func = "ALL"
+            else:
+                print("Wrong input!")
+                return False    
     
     sys.stdout.write("\rCreating Data Sets => Preparing.. ")
     wf = list(BoW.keys())[:lim]
