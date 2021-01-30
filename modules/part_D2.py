@@ -35,16 +35,14 @@ def get_vectors(glove_vector, revs, batch_size=200, shuffle=True):
     
     sys.stdout.write('\rGetting vectors loaders => Done\n ')
     return train_loader, valid_loader, test_loader
-#    return train, valid, test
 
+############################## TRAIN ###############################
 
-#trenowanie
 def train_network(model, train_loader, valid_loader, test_loader, num_epochs=5, learning_rate=1e-5, pltout=True):
     print('Neural Glove analyse\n')
     criterion = nn.CrossEntropyLoss()  #funkcja kosztu
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) 
-    losses, train_acc, valid_acc = [], [], []
-    epochs = []
+    losses, train_acc, valid_acc, epochs = [], [], [], []
     
     print(f'Model parameters:\n> Training_set size: {len(train_loader.dataset)} | Valid_set size: {len(valid_loader.dataset)} | Testing_set size: {len(test_loader.dataset)}\
 \n> Learning Rate: {learning_rate} | Iterations: {num_epochs}\n')

@@ -82,7 +82,7 @@ def LogRegr(training_set, testing_set):
 
 def SvmF(training_set, testing_set):
      
-    LinearSVC_classifier = SklearnClassifier(LinearSVC())
+    LinearSVC_classifier = SklearnClassifier(LinearSVC(max_iter=2000))
     LinearSVC_classifier.train(training_set)
     acc = (nltk.classify.accuracy(LinearSVC_classifier, testing_set))*100
         
@@ -119,7 +119,7 @@ def AllF(training_set, testing_set):
     LogisticRegression_classifier = SklearnClassifier(LogisticRegression(solver='lbfgs', max_iter=300))
     LogisticRegression_classifier.train(training_set)
 
-    LinearSVC_classifier = SklearnClassifier(LinearSVC())
+    LinearSVC_classifier = SklearnClassifier(LinearSVC(max_iter=2000))
     LinearSVC_classifier.train(training_set)
     
     agg_classifier = AggClassifier(MNB_classifier,

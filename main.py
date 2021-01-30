@@ -14,7 +14,7 @@
 from modules.part_A import load_csv2 as lcsv
 
 # tworzę liste krotek "a" i liste wszystkich słów "allwords"
-a, p_len, n_len, allwords = lcsv("movies_data.csv", lim = 1018) 
+a, p_len, n_len, allwords = lcsv("movies_data.csv", lim = 10000) 
 # daję 1018 żeby później operować na ok.500 pos i 500 neg. Finalnie ustawi się 0 => całosć
 
 print(f"\n\nNumber of reviews:\nPositive: {p_len}\nNegative: {n_len}")
@@ -66,27 +66,29 @@ siec = nn.Sequential(nn.Linear(200, 50),
                    
 #odpalam przejcie analizy opartej o embeddingi GloVe 200D     
 train_network(siec, train_l, valid_l, test_l, num_epochs=100, learning_rate=0.0001, pltout=False)
-print("Final test accuracy:", get_accuracy(siec, test_l)) #dokladnosc na zbiorze testowym
+acc = get_accuracy(siec, test_l)
+print(f"Final test accuracy: {acc:.2f}") #dokladnosc na zbiorze testowym
 
-            ##################### 3 #####################
+            #####################  3  ######################
+from modules.part_D3 import get_indx
+from modules.part_D3 import TBatcher
 
+train, valid, test = get_indx(glove, a)
 
+batch_size = 32
+train_loader = TBatcher(train, batch_size=batch_size, drop_last=True)  #dane treningowe z batchem
+valid_loader = TBatcher(valid, batch_size=batch_size, drop_last=False)  #dane walidacyjne z batchem
+test_loader = TBatcher(test, batch_size=batch_size, drop_last=False)  #dane testowe z batchem
 
+                ################# LSTM #################
+from modules.part_D3 import T_LSTM
+from modules.part_D3 import md_train
 
+model_lstm = T_LSTM(200, 5, 2) #model - warstwa ukryta moze miec inny wymiar
+md_train(model_lstm, train_loader, valid_loader, test_loader, num_epochs=15, learning_rate=2e-4, pltout=False)
 
+                ################# GRU #################
+from modules.part_D3 import T_GRU
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+model_gru = T_GRU(200, 5, 2) 
+md_train(model_gru, train_loader, valid_loader, test_loader, num_epochs=15, learning_rate=2e-4, pltout=False) 
