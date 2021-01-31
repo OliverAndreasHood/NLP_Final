@@ -27,19 +27,13 @@ def NaivB1(revs, BoW, lim=3000, TrSet=0.8, outacc=False, mostif=False, mif=10):
     start = time.time()
     print('Classic Naive Bayes algorythm\n')
    
-    sys.stdout.write("\r=> Preparing . ")
+    sys.stdout.write("\r=> Preparing.. ")
     wf = list(BoW.keys())[:lim]
-    
-    sys.stdout.write("\r=> Preparing #. ")                
     random.shuffle(revs)
-    
-    sys.stdout.write("\r=> Preparing ##. ")
     TrSet = int(len(revs)*TrSet)
     
-    sys.stdout.write("\r=> Preparing ###. ")
     featuresets = [(find_features(rev, wf),category) for (rev,category) in revs]
     
-    sys.stdout.write("\r=> Preparing ####. ")
     training_set = featuresets[:TrSet]
     testing_set = featuresets[TrSet:]
     sys.stdout.write(f"\rPreparing time {time.time()-start:.2f} s\n")

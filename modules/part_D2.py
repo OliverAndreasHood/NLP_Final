@@ -50,8 +50,7 @@ def train_network(model, train_loader, valid_loader, test_loader, num_epochs=5, 
     start = time.time()
     for epoch in range(num_epochs):          #dla kazdej epoki
         for tweets, labels in train_loader:  #przechodze dane treningowe
-            if epoch != 0:
-                sys.stdout.write(f'\rEpoch number: {epoch}/{num_epochs}')
+            sys.stdout.write(f'\rEpoch number: {epoch+1}/{num_epochs}')
             optimizer.zero_grad()
             pred = model(tweets)         
             loss = criterion(pred, labels)
@@ -66,6 +65,7 @@ def train_network(model, train_loader, valid_loader, test_loader, num_epochs=5, 
             valid_acc.append(get_accuracy(model, valid_loader))   #dokladnosc na zbiorze walidacyjnym
             sys.stdout.write(f'\rEpoch number: {epoch+1}      | Loss value: {loss:.4f} | Train accuracy: {round(train_acc[-1],3)} | Valid accuracy: {round(valid_acc[-1],3)}\n')
     sys.stdout.write(f'\r> Done ({time.time()-start:.2f} s)                                                                                                   \n')
+   
     #Wykresy
     if pltout:
       plt.title("Training Curve")
@@ -82,4 +82,7 @@ def train_network(model, train_loader, valid_loader, test_loader, num_epochs=5, 
       plt.legend(loc='best')
       plt.show()
     else:
-        print("plotout == False\n")
+        print("plotout == False")
+    
+    acc = get_accuracy(model, test_loader)
+    print(f"Final test accuracy: {acc:.2f}\n")

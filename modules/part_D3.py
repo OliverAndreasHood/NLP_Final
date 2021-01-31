@@ -74,6 +74,8 @@ class T_GRU(nn.Module):
         out = self.fc(out[:, -1, :]) #ostatni output przeksztalcamy liniowo jeszcze
         return out
 
+############################## TBatch ###############################
+
 class TBatcher:
     def __init__(self, revs, batch_size=32, drop_last=False):
         self.revs_by_length = {} 
@@ -101,7 +103,7 @@ class TBatcher:
 ############################## TRAIN ###############################
 
 def md_train(model, train_loader, valid_loader, test_loader, num_epochs=5, learning_rate=1e-5, pltout=True):
-    print('Trening recurential network..\n')
+    print('\nTrening recurential network..')
     criterion = nn.CrossEntropyLoss() 
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) 
     losses, train_acc, valid_acc, epochs = [], [], [], []  
@@ -110,8 +112,7 @@ def md_train(model, train_loader, valid_loader, test_loader, num_epochs=5, learn
     start = time.time()
     for epoch in range(num_epochs):          #dla kazdej epoki
         for tweets, labels in train_loader:  #przechodze dane treningowe
-            if epoch != 0:
-                sys.stdout.write(f'\rEpoch number: {epoch}/{num_epochs}')
+            sys.stdout.write(f'\rEpoch number: {epoch+1}/{num_epochs}')
             optimizer.zero_grad()
             pred = model(tweets)         
             loss = criterion(pred, labels)
@@ -119,12 +120,10 @@ def md_train(model, train_loader, valid_loader, test_loader, num_epochs=5, learn
             optimizer.step()
         losses.append(float(loss))           #zapisuje wartosc funkcji kosztu
         
-        
-        if epoch % int(num_epochs/5) == 0:                   
-            epochs.append(epoch)             
-            train_acc.append(get_accuracy(model, train_loader))   #dokladnosc na zbiorze treningowym
-            valid_acc.append(get_accuracy(model, valid_loader))   #dokladnosc na zbiorze walidacyjnym
-            sys.stdout.write(f'\rEpoch number: {epoch+1}      | Loss value: {loss:.4f} | Train accuracy: {round(train_acc[-1],3)} | Valid accuracy: {round(valid_acc[-1],3)}\n')
+        epochs.append(epoch)             
+        train_acc.append(get_accuracy(model, train_loader))   #dokladnosc na zbiorze treningowym
+        valid_acc.append(get_accuracy(model, valid_loader))   #dokladnosc na zbiorze walidacyjnym
+        sys.stdout.write(f'\rEpoch number: {epoch+1}      | Loss value: {loss:.4f} | Train accuracy: {round(train_acc[-1],3)} | Valid accuracy: {round(valid_acc[-1],3)}\n')
     sys.stdout.write(f'\r> Done ({time.time()-start:.2f} s)                                                                                                   \n')
     #Wykresy
     if pltout:
@@ -143,7 +142,7 @@ def md_train(model, train_loader, valid_loader, test_loader, num_epochs=5, learn
       plt.show()
     else:
         print("plotout == False\n")    
-    print('Dokładność na zbiorze testowym wynosi : {:.4f}'.format(get_accuracy(model, test_loader)))
+    print('Accuracy on test set : {:.4f}'.format(get_accuracy(model, test_loader)))
 
 
     

@@ -74,8 +74,7 @@ def bow_and_web(revs, TrSet=0.8, lr=0.1, n_iters=100):
     start = time.time()
     for epoch in range(n_iters):
         for instance, label in training_set:
-            if epoch != 0:
-                sys.stdout.write(f'\rEpoch number: {epoch}/{n_iters}')
+            sys.stdout.write(f'\rEpoch number: {epoch+1}/{n_iters}')
             bow_vec = autograd.Variable(make_bow_vector(instance, word_to_ix))
             target = autograd.Variable(make_target(label, label_to_ix))
     

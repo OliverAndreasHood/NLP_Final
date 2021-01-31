@@ -22,12 +22,12 @@ Mamy do zrobienia:
             10 powtórzeń budowania modelu
     
     D. Analiza o neuronowe:
-        1. Reprezentacja (Bag of Words) i jedno przekształcenie liniowe
+        1. Reprezentacja (Bag of Words) i jedno przekształcenie liniowe	(DONE!)
             Trening_set = 80%
             Test_set = 20%
-        2. Embeddingi 200D {200 wymiarów badabum plask blee}:
+        2. Embeddingi 200D {200 wymiarów badabum plask blee}:	(DONE!)
             Każda recenzja jako suma/srednia aryt. jej embeddingów.
-        3. Embeddingi 200D + LSTM lub/oraz GRU
+        3. Embeddingi 200D + LSTM lub/oraz GRU	(DONE!)
         
         Ad 2 i 3:
             Trening_set = 70%
