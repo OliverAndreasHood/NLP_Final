@@ -89,9 +89,8 @@ def bow_and_web(revs, TrSet=0.8, lr=0.1, n_iters=100):
             #zerujemy gradient
             optimizer.zero_grad()
 
-        if epoch % int(n_iters/5) == 0:
-            sys.stdout.write(f'\rEpoch number: {epoch+1} \t| Loss value: {loss:.4f}\n')
-    sys.stdout.write(f'\r> Done ({time.time()-start:.2f} s)                  ')
+        sys.stdout.write(f'\rEpoch number: {epoch+1} \t| Loss value: {loss:.4f}\n')
+    sys.stdout.write(f'\r> Done ({time.time()-start:.2f} s)                  \n')
 
     for instance, label in test_set:
         bow_vec = autograd.Variable(make_bow_vector(instance, word_to_ix))
