@@ -25,7 +25,7 @@ else: print("The data is "+'\x1b[7;30;41m'+"not balanced!\n"+"\x1b[0m")
 from modules.part_B import word_counter2 as wc
 
 # tworzę BagOfWords i wypusuję wartosci Bow,Sow + plot 40 most_common
-bow = wc(allwords, cl = 40, out=False)
+bow = wc(allwords, cl = 40, out=True)
 
 ############################## PART_C ####################################
 from modules.part_C import NaivB1 as NB1
@@ -35,7 +35,7 @@ from modules.part_C import Cmain_f as Cf
 NB1(a, bow, outacc=True, mostif=True, mif=15)
 
 # odpalam serię wszystkich metod po 10 powtórzeń, zwraca listę wyników.
-accs = Cf(a, bow, repeats=10, auto=False, func="NB")
+accs = Cf(a, bow, repeats=10, auto=True)
 
 ############################### PART_D ####################################
 from modules.part_D1 import bow_and_web
